@@ -26,20 +26,22 @@ VPN是虚拟私有网络Virtual Private Network的简称，它能在不可信的
 5. 建立密钥和证书
 
     `mkdir /etc/openvpn/easy-rsa/keys`
-
+    
     编辑 [/etc/openvpn/easy-rsa/vars](./openvpnconf/vars)
+```
+    cd /etc/openvpn/easy-rsa
+    source ./vars
+    ./clean-all
+    ./build-ca
+    ./build-key-server server
+    ./build-dh
+    cd /etc/openvpn/easy-rsa/keys
+    cp dh2048.pem ca.crt server.crt server.key /etc/openvpn
+    cd /etc/openvpn/easy-rsa
+    ./build-key client
+    cp /etc/openvpn/easy-rsa/openssl-1.0.0.cnf /etc/openvpn/easy-rsa/openssl.cnf
+```
 
-    `cd /etc/openvpn/easy-rsa`
-    `source ./vars`
-    `./clean-all`
-    `./build-ca`
-    `./build-key-server server`
-    `./build-dh`
-    `cd /etc/openvpn/easy-rsa/keys`
-    `cp dh2048.pem ca.crt server.crt server.key /etc/openvpn`     
-    `cd /etc/openvpn/easy-rsa`
-    `./build-key client`
-    `cp /etc/openvpn/easy-rsa/openssl-1.0.0.cnf /etc/openvpn/easy-rsa/openssl.cnf`
 5. 配置防火墙
 
 ```
