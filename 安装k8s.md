@@ -52,12 +52,70 @@ https://kubernetes.io/docs/setup/production-environment/container-runtimes/#cont
     exclude=kubelet kubeadm kubectl
     EOF
     yum -y install kubelet kubeadm kubectl --disableexcludes=kubernetes
-4.获取加入令牌
+4.安装calcio, 要注意使用IP_AUTODETECTION_METHOD interface=bond0, 因为我的机器上有多个网卡，网络，还有VPN, 可以在每个节点上用calcio-node -show-status去调试查看
+https://projectcalico.docs.tigera.io/reference/node/configuration#ip-autodetection-methods
+
+4.获取令牌,加入节点
 kubeadm join 10.200.39.79:6443 --token sskfzl.puu6l9jozsve6cj4 --discovery-token-ca-cert-hash sha256:25eb0937d62e37b82b40af2decd2d90efba74094c98dc05422c7a5822e43351e
+5.安装ingress-nginx
+kubectl apply -f controller-v1.2.0.cloud.deploy.yaml
+6.安装kubernetes dashboard
+kubectl apply -f aio/deploy/recommended.yaml
+7.配置kubernetes dashboard 到ingress-nginx
+kubectl apply -f dashboard-ingress.yaml
+8.建立用户并绑定角色,参考https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md
+    apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+    name: admin-user
+    namespace: kubernetes-dashboard
+    ---
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+    name: admin-user
+    roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: cluster-admin
+    subjects:
+    - kind: ServiceAccount
+    name: admin-user
+    namespace: kubernetes-dashboard
+9.获取令牌并登入dashboard
+kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"    
+
+
+10.安装helm https://helm.sh/docs/intro/install/
+    Download your desired version
+    Unpack it (tar -zxvf helm-v3.0.0-linux-amd64.tar.gz)
+    Find the helm binary in the unpacked directory, and move it to its desired destination (mv linux-amd64/helm /usr/local/bin/helm)
+
+11.
+
+12.安装goharbor
+https://goharbor.io/docs/2.5.0/install-config/harbor-ha-helm/
+
 
 
 问题排查
-1.现象
+1.出错信息
 https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64/repodata/repomd.xml: [Errno -1] repomd.xml signature could not be verified for kubernetes
-方案，关闭 gpgcheck=0 repo_gpgcheck=0
+解决方法，关闭 gpgcheck=0 repo_gpgcheck=0
+2.出错信息
+Error from server (InternalError): error when creating "dashboard-ingress.yaml": Internal error occurred: failed calling webhook "validate.nginx.ingress.kubernetes.io": failed to call webhook: Post "https://ingress-nginx-controller-admission.ingress-nginx.svc:443/networking/v1/ingresses?timeout=10s": context deadline exceeded
+解决方法,kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 
+3.CoreDNS调试
+bash-4.2# dig @10.7.0.10 -p 53 oatas.veritas.com
+; <<>> DiG 9.11.4-P2-RedHat-9.11.4-26.P2.el7_9.9 <<>> @10.7.0.10 -p 53 oatas.veritas.com
+; (1 server found)
+;; global options: +cmd
+;; connection timed out; no servers could be reached
+
+https://kubernetes.io/docs/tasks/administer-cluster/coredns/
+
+
+
+ingress-nginx 和 nginx-ingress 区别
+nginx学习 https://www.digitalocean.com/community/tutorials/understanding-nginx-server-and-location-block-selection-algorithms

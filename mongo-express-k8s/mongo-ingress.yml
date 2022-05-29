@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mongodb-ingress
+  namespace: mongodb-namespace
+  annotations:
+  #  nginx.ingress.kubernetes.io/app-root: /mongodbexpress/
+  #  nginx.ingress.kubernetes.io/rewrite-target: /$2
+  #  nginx.ingress.kubernetes.io/configuration-snippet: |
+  #    rewrite ^/mongodbexpress/(.*)$ /$1 redirect;
+spec:
+  # tls:
+  # - hosts:
+  #   - myapp.com
+  #     secretName: myapp-secret-tls
+  ingressClassName: nginx
+  rules:
+    - host: oatas.veritas.com
+      http:
+        paths:
+          - path: /mongodbexpress
+            pathType: Prefix
+            backend:
+              service:
+                name: mongodb-express-service
+                port:
+                  number: 8081

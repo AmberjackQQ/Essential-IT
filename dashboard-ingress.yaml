@@ -1,0 +1,34 @@
+# We're assuming here that the kubernetes dashboard deployment creates a service
+# called "kubernetes-dashboard".  This should be accurate if you've deployed the
+# dashboard according to these instructions: https://github.com/kubernetes/dashboard
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dashboard-ingress
+  namespace: kubernetes-dashboard
+  annotations:
+    # type of authentication [basic|digest]
+    #ingress.kubernetes.io/auth-type: basic
+    # name of the secret that contains the user/password definitions
+    #ingress.kubernetes.io/auth-secret: dashboard-auth-secret
+    # message to display with an appropiate context why the authentication is required
+    #ingress.kubernetes.io/auth-realm: "Authentication Required"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      rewrite ^(/k8sdashboard)$ $1/ redirect;
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: oatas.veritas.com
+    http:
+      paths:
+      - path: /k8sdashboard(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: kubernetes-dashboard
+            port:
+              number: 443
