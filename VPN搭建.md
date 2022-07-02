@@ -90,9 +90,24 @@ VPN是虚拟私有网络Virtual Private Network的简称，它能在不可信的
     verb 3
 ```    
 2.  设置openvpn-client服务
-    `mv /usr/lib/systemd/system/openvpn-client\@.service /usr/lib/systemd/system/openvpn-client\@1.service `
+    `cp /usr/lib/systemd/system/openvpn-client\@.service /usr/lib/systemd/system/openvpn-client\@1.service `
     `systemctl enable openvpn-client\@1`
 3.  检查服务是否成功
     `systemctl status openvpn-client\@1`
 4.  检查路由器
     `route -n`
+
+# 迁移openvpn
+1. 搭建一台新的CentOS7服务器,硬件如下,安装centos7.9 server with GUI 和openvepn
+   80processor Intel(R) Xeon(R) Gold 6138 CPU @ 2.00GHz
+   dmidecode -t memory | grep  Size: | grep -v "No Module Installed" | awk '{sum+=$2}END{print sum}'
+   768GB
+2. 用nc 工具选择合适的协议和规则，tcp 443
+    nc -u -l 1194
+    nc 10.85.21.225 1194
+3. 配置网卡到trusted zone 并且设置 NAT, ip_forward=1
+    firewall-cmd --permanent --zone=trust --add-interface=eno1    firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A POSTROUTING -s 10.8.1.0/24 -o eno1 -j MASQUERADE
+    firewall-cmd --reload
+    systemctl restart firewalld
+4. 复制/etc/openvpn
+5. 启动服务openvpn@server

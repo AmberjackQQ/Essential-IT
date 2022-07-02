@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana-ingress
+  namespace: monitoring
+  annotations:
+  #nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+  #nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+  #  nginx.ingress.kubernetes.io/rewrite-target: /$2
+  #  nginx.ingress.kubernetes.io/configuration-snippet: |
+  #    rewrite ^/mongodbexpress/(.*)$ /$1 redirect;
+spec:
+  # tls:
+  # - hosts:
+  #   - myapp.com
+  #     secretName: myapp-secret-tls
+  ingressClassName: nginx
+  rules:
+  - host: oatas.veritas.com
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: grafana
+              port: 
+                number: 3000

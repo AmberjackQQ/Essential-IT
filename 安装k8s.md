@@ -172,3 +172,15 @@ https://kubernetes.io/docs/tasks/administer-cluster/coredns/
 
 # ingress-nginx 和 nginx-ingress 区别
 nginx学习 https://www.digitalocean.com/community/tutorials/understanding-nginx-server-and-location-block-selection-algorithms
+
+# kubernetes dashboard crashloopbackoff
+NAME                                         READY   STATUS             RESTARTS          AGE
+dashboard-metrics-scraper-799d786dbf-gxcxg   1/1     Running            0                 44d
+kubernetes-dashboard-8cb699769-jnx8c         0/1     CrashLoopBackOff   133 (4m58s ago)   13h
+
+ ----     ------   ----                  ----     -------
+  Warning  BackOff  89s (x3074 over 12h)  kubelet  Back-off restarting failed container
+解决办法：重启部署
+kubectl delete -f kubernetes-dashboard.recommended.yaml 
+kubectl apply -f kubernetes-dashboard.recommended.yaml
+
