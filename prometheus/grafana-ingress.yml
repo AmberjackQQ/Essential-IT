@@ -19,7 +19,7 @@ spec:
   - host: oatas.veritas.com
     http:
       paths:
-        - path: /
+        - path: /grafana
           pathType: Prefix
           backend:
             service:

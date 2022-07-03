@@ -153,7 +153,7 @@ https://goharbor.io/docs/2.5.0/install-config/harbor-ha-helm/
 
     参考https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner
     helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
-    helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=10.200.39.3 --set nfs.path=/storage/k8s/nfs
+    helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner -n monitoring --set nfs.server=10.200.39.3 --set nfs.path=/storage/k8s/nfs
     测试是否成功
 
 ```    
