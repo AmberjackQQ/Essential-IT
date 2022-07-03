@@ -1,0 +1,7 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: managed-nfs-storage
+provisioner: oatas.appliance.io/nfs ## 可以按需更改,换成自定义的,必须配合deployment.yaml
+parameters:
+  archiveOnDelete: "false"  

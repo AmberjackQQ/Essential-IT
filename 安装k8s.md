@@ -149,6 +149,33 @@ kubectl apply -f dashboard-ingress.yaml
 
 https://goharbor.io/docs/2.5.0/install-config/harbor-ha-helm/
 
+- 建立nfs-client storage class
+
+    参考https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner
+    helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
+    helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=10.200.39.3 --set nfs.path=/storage/k8s/nfs
+    测试是否成功
+
+```    
+    git clone https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner.git
+    [root@harbor deploy]# kubectl apply -f test-claim.yaml 
+    persistentvolumeclaim/test-claim created
+    [root@harbor deploy]# kubectl get pvc
+    NAME         STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+    test-claim   Bound    pvc-e2d21bde-08b7-49e1-9cb8-fbdf097400e6   1Mi        RWX            nfs-client     2m47s
+    [root@harbor deploy]# kubectl apply -f test-pod.yaml 
+    pod/test-pod created
+    [root@harbor deploy]# ls -al /storage/k8s/nfs/default-test-claim-pvc-e2d21bde-08b7-49e1-9cb8-fbdf097400e6/
+    total 0
+    drwxrwxrwx 2 root root 29 Jul  3 15:53 .
+    drwxr-xr-x 3 root root 81 Jul  3 15:48 ..
+    -rw-r--r-- 1 root root  0 Jul  3 15:53 SUCCESS 
+    [root@harbor deploy]# kubectl delete -f test-pod.yaml 
+    pod "test-pod" deleted
+    [root@harbor deploy]# kubectl delete -f test-claim.yaml 
+    persistentvolumeclaim "test-claim" deleted
+
+```
 
 
 
