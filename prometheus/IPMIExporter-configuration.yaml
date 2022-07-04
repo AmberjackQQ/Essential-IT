@@ -1,0 +1,19 @@
+apiVersion: v1
+data:
+  config.yml: |-
+        modules:
+              default:
+                      user: "sysadmin"
+                      pass: "P@ssw0rd"
+                      collectors:
+                      - bmc
+                      - chassis
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: exporter
+    app.kubernetes.io/name: ipmi-exporter
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: 1.6.1
+  name: ipmi-exporter-configuration
+  namespace: monitoring

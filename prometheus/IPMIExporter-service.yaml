@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ipmi-exporter
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/name: ipmi-exporter
+    app.kubernetes.io/instance: ipmi-exporter
+spec:
+  ports:
+    - protocol: TCP
+      name: metrics
+      port: 9290
+  selector:
+    app.kubernetes.io/name: ipmi-exporter
+    app.kubernetes.io/instance: ipmi-exporter

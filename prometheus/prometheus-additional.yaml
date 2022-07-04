@@ -1,0 +1,8 @@
+- job_name: "ipmi"
+  scrape_interval: 1m
+  scrape_timeout: 30s
+  metrics_path: /metrics
+  scheme: http
+  static_configs:
+  - targets:
+    - 10.6.158.233:9290

@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: exporter
+    app.kubernetes.io/name: ipmi-exporter
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: 1.6.1
+  name: ipmi-exporter
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: exporter
+      app.kubernetes.io/name: ipmi-exporter
+      app.kubernetes.io/part-of: kube-prometheus
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: ipmi-exporter
+      labels:
+        app.kubernetes.io/component: exporter
+        app.kubernetes.io/name: ipmi-exporter
+        app.kubernetes.io/part-of: kube-prometheus
+        app.kubernetes.io/version: 1.6.1
+    spec:
+      automountServiceAccountToken: true
+      containers:
+      - args:
+        - --config.file=/etc/ipmi_exporter/config.yml
+        - --web.listen-address=:9290
+        - --log.level=debug
+        image: prometheuscommunity/ipmi-exporter:v1.6.1
+        name: ipmi-exporter
+        ports:
+        - containerPort: 9290
+          name: http
+        resources:
+          limits:
+            cpu: 20m
+            memory: 400Mi
+          requests:
+            cpu: 10m
+            memory: 200Mi
+        securityContext:
+          allowPrivilegeEscalation: true
+          readOnlyRootFilesystem: false
+          runAsUser: 0
+        volumeMounts:
+        - mountPath: /etc/ipmi_exporter/
+          name: config
+          readOnly: true
+      volumes:
+      - configMap:
+          name: ipmi-exporter-configuration
+        name: config

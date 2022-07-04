@@ -29,6 +29,18 @@ go install github.com/google/go-jsonnet/cmd/jsonnet@latest
 
 https://github.com/prometheus-operator/kube-prometheus/blob/release-0.11/docs/customizations/exposing-prometheus-alertmanager-grafana-ingress.md
 
+# 配置IPMI exporter
+kubectl apply -f IPMIExporter-configuration.yaml
+kubectl apply -f IPMIExporter-deployment.yaml
+https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/additional-scrape-config.md
+kubectl create secret generic additional-scrape-configs --from-file=prometheus-additional.yaml --dry-run -oyaml  additional-scrape-configs.yaml
+kubectl apply -f additional-scrape-configs.yaml -n monitoring
+add additionalScrapeConfigs: under spec
+    name: additional-scrape-configs
+    key: prometheus-additional.yaml  
+to prometheus-prometheus.yaml
+kubectl apply -f manifests/prometheus-prometheus.yaml 
+
 
 # 排错
 ## 不能ping通 grafana pod ip, 或者 访问 ingress配置的grafana UI, 显示504错误

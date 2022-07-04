@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ipmi-prometheus-servicemonitor
+  namespace: monitoring
+  labels:
+    name: ipmi-prometheus-servicemonitor
+    release: kube-monitoring
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: ipmi-exporter
+      app.kubernetes.io/name: ipmi-exporter 
+  namespaceSelector:
+    matchNames:
+      - monitoring
+  endpoints:
+    - port: metrics
+      path: /metrics
