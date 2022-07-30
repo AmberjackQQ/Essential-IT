@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: monitoring
+  name: pushgateway
+  labels:
+    app: pushgateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pushgateway
+  template:
+    metadata:
+      labels:
+        app: pushgateway
+    spec:
+      containers:
+      - name: pushgateway
+        image: prom/pushgateway
+        ports:
+          - name: http
+            containerPort: 9091
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pushgateway
+  namespace: monitoring
+  annotations:
+    prometheus.io/scrape: 'true'
+  labels:
+    name: pushgateway
+spec:
+  selector:
+    app: pushgateway
+  type: NodePort
+  ports:
+  - name: pushgateway
+    protocol: TCP
+    port: 9091
+    nodePort: 30901

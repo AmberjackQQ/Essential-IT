@@ -40,6 +40,45 @@ add additionalScrapeConfigs: under spec
     key: prometheus-additional.yaml  
 to prometheus-prometheus.yaml
 kubectl apply -f manifests/prometheus-prometheus.yaml 
+在k8s dashboard上修改这个secret, 保存之后，在proethemues pod 里面的/etc/prometheus/config_out/prometheus.env.yaml 会自动修改更新
+
+# 部署pushgateway
+1. 在k8s dashboard 上修改secret 加入
+```
+- job_name: pushgateway
+  scrape_timeout: 30s
+  scrape_interval: 1m
+  metrics_path: /metrics
+  honor_labels: true
+  scheme: http
+  static_configs:
+  - targets:
+    - 10.7.21.159:9091
+    labels:
+      instance: pushgateway
+```
+2. 进入prometheus pod shell run 
+cat /etc/prometheus/config_out/prometheus.env.yaml 
+确认pushgateway job 配上
+
+3. 在node上运行如下命令，reload promethues
+[root@harbor prometheus]# curl -X POST http://10.7.37.123:9090/-/reload
+
+4. 查看prometheus target 确认pushgateway target 存在
+ http://10.7.37.123:9090/targets?search= 
+
+5. 测试 
+[root@harbor prometheus]# echo "some_metric 3.14" | curl --data-binary @- http://10.7.21.159:9091/metrics/job/some_job
+6. 访问 http://10.7.21.159:9091/
+!(/assets/img/pushgateway_metrics.png "test") 
+
+
+
+[root@harbor ~]# kubectl apply -f https://github.com/cncf/demo/blob/master/AddOns/Prometheus/pushgateway.yaml
+error: error parsing https://github.com/cncf/demo/blob/master/AddOns/Prometheus/pushgateway.yaml: error converting YAML to JSON: yaml: line 28: mapping values are not allowed in this context
+
+
+https://github.com/pierDipi/k8s-test-infra/blob/master/config/prow/cluster/pushgateway_deployment.yaml
 
 
 # 排错
