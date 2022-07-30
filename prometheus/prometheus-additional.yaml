@@ -6,3 +6,13 @@
   static_configs:
   - targets:
     - 10.6.158.233:9290
+- job_name: "pushgateway"
+  scrape_interval: 15s
+  scrape_timeout: 30s
+  honor_label: true
+  static_configs:
+  - targets:
+    - 10.7.21.159:9091
+    lables:
+    instance: pushgateway
+  
