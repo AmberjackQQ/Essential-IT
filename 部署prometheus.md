@@ -69,6 +69,8 @@ cat /etc/prometheus/config_out/prometheus.env.yaml
 
 5. 测试 
 [root@harbor prometheus]# echo "some_metric 3.14" | curl --data-binary @- http://10.7.21.159:9091/metrics/job/some_job
+或者 curl -XPOST --data-binary @push.txt http://10.7.21.159:9091/metrics/job/test_new_signing_server/instance/round_test_1
+
 6. 访问 pushgateway node http://10.7.21.159:9091/
  ![alt "example"](/assets/img/pushgateway_metrics.png) 
 7. 访问 promethues http://10.7.37.123:9090/graph?g0.expr=some_metric&g0.tab=0&g0.stacked=0&g0.show_exemplars=0&g0.range_input=1h
