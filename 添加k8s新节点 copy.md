@@ -42,6 +42,7 @@
         --add-repo \
         https://download.docker.com/linux/centos/docker-ce.repo
     yum -y install 使用--allowrasing docker-ce docker-ce-cli containerd.io docker-compose-plugin
+    #今天在centos8.4 上试不用--allowrasing 也可以安装, 主要 yum erase podman containerd.io runc在安装前
 ```
 
    - 添加native.cgroupdriver=systemd 在/etc/docker/daemon.json (在RHEL84上略过)
