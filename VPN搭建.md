@@ -104,7 +104,7 @@ VPN是虚拟私有网络Virtual Private Network的简称，它能在不可信的
    768GB
 2. 用nc 工具选择合适的协议和规则，tcp 443
     nc -u -l 1194
-    nc 10.85.21.225 1194
+    nc <openvpn server IP> 1194
 3. 配置网卡到trusted zone 并且设置 NAT, ip_forward=1
     firewall-cmd --permanent --zone=trust --add-interface=eno1    firewall-cmd --permanent --direct --passthrough ipv4 -t nat -A POSTROUTING -s 10.8.1.0/24 -o eno1 -j MASQUERADE
     firewall-cmd --reload
