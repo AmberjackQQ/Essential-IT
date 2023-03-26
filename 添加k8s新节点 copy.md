@@ -61,7 +61,7 @@
       systemctl start docker
 ```
 
-   - 编辑/etc/containerd/config.toml 加入# 注销disabled_plugins = ["cri"]
+   - 编辑/etc/containerd/config.toml 加入# 注销disabled_plugins = ["cri"] [centos84 上已经disabled了]
     systemctl restart containerd
 
 - 安装kubernetes 
