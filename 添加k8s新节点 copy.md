@@ -81,11 +81,11 @@
     yum install kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes
 ```
 
-- 获取token, 在master上运行
+- 获取token, 
 
 ```
 [root@n39-h79 ~]# kubeadm token create --print-join-command
-kubeadm join 10.200.39.79:6443 --token 01duz3.34u69ohvkt5l3smn --discovery-token-ca-cert-hash sha256:25eb0937d62e37b82b40af2decd2d90efba74094c98dc05422c7a5822e43351e 
+
 ```
 
 - 安装calcio
