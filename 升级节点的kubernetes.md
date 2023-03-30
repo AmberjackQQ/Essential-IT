@@ -16,6 +16,11 @@ https://v1-24.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-u
 
 ## 升级control-panel节点
 
+### 错误1  Error: failed to parse kubelet flag: unknown flag: --network-plugin
+    解决办法1， 删除--network-plugin=cni在/var/lib/kubelet/kubeadm-flags.env中
+    
+ 
+ 
 [root@n39-h79 ~]# kubeadm upgrade plan
 [upgrade/config] Making sure the configuration is correct:
 [upgrade/config] Reading configuration from the cluster...
