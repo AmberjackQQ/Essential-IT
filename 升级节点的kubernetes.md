@@ -17,10 +17,11 @@ https://v1-24.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-u
 ## 升级control-panel节点
 
 ### 错误1  Error: failed to parse kubelet flag: unknown flag: --network-plugin
-    解决办法1， 删除--network-plugin=cni在/var/lib/kubelet/kubeadm-flags.env中
+    解决办法， 删除--network-plugin=cni在/var/lib/kubelet/kubeadm-flags.env中 ,以及启动参数详情见https://www.wulaoer.org/?p=2652
     
  
- 
+ ### 错误2
+ ```
 [root@n39-h79 ~]# kubeadm upgrade plan
 [upgrade/config] Making sure the configuration is correct:
 [upgrade/config] Reading configuration from the cluster...
@@ -33,5 +34,9 @@ W0330 20:25:26.016530   12349 initconfiguration.go:120] Usage of CRI endpoints w
         [ERROR CoreDNSMigration]: CoreDNS will not be upgraded: start version '1.9.2' not supported
 [preflight] If you know what you are doing, you can make a check non-fatal with `--ignore-preflight-errors=...`
 To see the stack trace of this error execute with --v=5 or higher
-
+```
+   解决办法 降低coredns kubectl set image deployment/coredns coredns/coredns:1.8.6
+   
+参考链接
 https://v1-24.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/#upgrading-control-plane-nodes
+https://www.wulaoer.org/?p=2652
