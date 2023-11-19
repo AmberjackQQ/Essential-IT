@@ -32,6 +32,7 @@ VPN是虚拟私有网络Virtual Private Network的简称，它能在不可信的
     cd /etc/openvpn/easy-rsa
     source ./vars
     ./clean-all
+    cp openssl-1.0.0.cnf openssl.cnf
     ./build-ca
     ./build-key-server server
     ./build-dh
