@@ -12,13 +12,13 @@ VPN是虚拟私有网络Virtual Private Network的简称，它能在不可信的
     `yum install -y openvpn`
 
 3. 安装Easy RSA 
-
+```bash
     `yum install -y openvpn wget`
     `wget -O /tmp/easyrsa https://github.com/OpenVPN/easy-rsa-old/archive/2.3.3.tar.gz`
     `tar xfz /tmp/easyrsa`
     `mkdir /etc/openvpn/easy-rsa`
     `cp -rf easy-rsa-old-2.3.3/easy-rsa/2.0/* /etc/openvpn/easy-rsa`
-
+```
 4. 配置OpenVPN
 
         指定VPN使用端口，IP地址范围，route的范围以及DHCP, 详情参见[server.conf](./openvpnconf/server.conf)
