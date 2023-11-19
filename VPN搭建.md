@@ -40,7 +40,6 @@ VPN是虚拟私有网络Virtual Private Network的简称，它能在不可信的
     cp dh2048.pem ca.crt server.crt server.key /etc/openvpn
     cd /etc/openvpn/easy-rsa
     ./build-key client
-    cp /etc/openvpn/easy-rsa/openssl-1.0.0.cnf /etc/openvpn/easy-rsa/openssl.cnf
 ```
 
 5. 配置防火墙
