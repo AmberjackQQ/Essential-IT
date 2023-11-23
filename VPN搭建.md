@@ -6,12 +6,13 @@ VPN是虚拟私有网络Virtual Private Network的简称，它能在不可信的
 1. 安装epel源
 
     `yum install epel-release -y`
+    或者sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-$(rpm -E '%{rhel}').noarch.rpm
 
-2. 安装openvpn
+3. 安装openvpn
 
     `yum install -y openvpn`
 
-3. 安装Easy RSA 
+4. 安装Easy RSA 
 ```bash
     `yum install -y openvpn wget`
     `wget -O /tmp/easyrsa https://github.com/OpenVPN/easy-rsa-old/archive/2.3.3.tar.gz`
